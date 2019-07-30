@@ -1,0 +1,66 @@
+Tests:
+POST /register --> fet
+GET /users --> fet
+POST /Login --> fet
+GET /user --> fet
+GET /userInfo/username
+GET /userinfoById/id 
+DELETE /user --> fet
+PUT /user --> fet
+POST /like/userId --> fet
+POST /dislike/userId --> fet
+
+POST /forum --> fet
+POST /commentForum --> fet
+GET /forums --> fet
+GET /fullForum/id --> fet
+DELETE /commentForum/id
+
+POST /advert --> fet
+GET /advert -->fet
+DELETE /advert --> fet
+PATCH /advert --> discutir si state per valor o segons el de la BD
+PUT /advert/id 
+GET /advertUser --> fet
+
+Not implemented:
+
+Inscription:
+POST /Inscription --> fet
+GET /inscription/advertId --> fet
+GET /inscriptionUser/userId
+
+TODO:Alex
+
+Gamificación: poner una puntuacion al userSchema i cada vez que haga un advert, sumar puntos, hace forum, puntos, etc...
+
+GET forums/ --> si no existe forum, loop sin fin --> fet??
+Gamificación: poner una puntuacion al userSchema i cada vez que haga un advert, sumar puntos, hace forum, puntos, etc...
+
+
+
+//TODO: vendre la aplicació! no la idea: presentació tecnica, vendreli com hem treballat, metodologia (com hem treballat en el equip), explicar les lliçons apreses a partir de lo que hem fet
+, demo, arquitectura... som nosaltres qui definim que presentem
+// per a que vegui que em treballat be entre nosaltres, 
+Document final: fer retrospectiva del projecte, qué canviariem, que ha anat be, que ha anat malament.... La ultima entrega ha de tenir la 4a iteratio i el ultim Document
+
+TODO: presentacio
+explicar la solucio tecnicament, orientat a gestio de projecte.
+explicar arquitectura, front/back/...
+explicar les proves que hem fet, com, etc...
+20/25 min max
+
+demo de la app, amb projector per tal de que es vegui desde la pantlla gran, sera en una aula 
+que no peti
+som nosaltres qui definim que es el que mostrem, podem explicar que esta fet.
+BD: reset i posar dades netes
+hem de venir tots
+
+coses obligatories:
+- backend: arquitectura i tecnos asociades, explicar el xk hem utilitzat aquestes tecnos
+- xk hem utilitzat el cloud, ...
+- justificar qué i com hem escollit 
+
+
+Android:
+https://socket.io/blog/native-socket-io-and-android/#

@@ -1,0 +1,1 @@
+Aquesta carpeta servirà per emmagatzemar momentàniament les imatges que es vulguin pujar al cloud!

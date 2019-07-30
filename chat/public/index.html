@@ -1,0 +1,179 @@
+<html>
+
+<head>
+  <title>
+    Node.js chat
+  </title>
+  <style>
+    #contentWrap {
+      display: none;
+    }
+
+    #chatWrap {
+      float: left;
+    }
+
+    #chat {
+      position: relative;
+      width: 100%;
+      float: left;
+      min-height: 100px;
+      height: 90%;
+      overflow: auto;
+    }
+  </style>
+
+  <script src="https://code.jquery.com/jquery.js"></script>
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css">
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="page-header">
+      <h1>Node.js Chat
+        <small> Developed by
+          <a href="http://geekytheory.com" target="_blank">Geeky Theory</a>
+        </small>
+      </h1>
+    </div>
+
+    <div class="input-group" style="width:300px;text-align:center;margin:0 auto;" id="nickWrap">
+      <input id="nicknameFrom" class="form-control input-lg" type="text" placeholder="From user">
+      <input id="nicknameTo" class="form-control input-lg" type="text" placeholder="To user">
+      <span class="input-group-btn">
+        <button class="btn btn-lg btn-primary" type="submit" id="setNick">OK</button>
+      </span>
+    </div>
+    <div class="alert fade in alert-danger alert-dismissable" data-dismiss="alert" id="login-error" style="display:none;">
+      <button type="button" class="close" id="closeAlert">×</button>
+      That username is already taken. Try again.
+    </div>
+
+    <div id="contentWrap" class="row" style="height: 70%;">
+      <div class="col-md-2"></div>
+      <div id="chatWrap" class="col-md-6">
+        <div class="panel panel-success">
+          <div id="panelHead" class="panel-heading">Chat</div>
+          <div id="chat" class="panel-body"></div>
+        </div>
+
+        <div>
+          <form id="send-message" class="input-group" style="text-align:center;margin:0 auto;">
+            <input id="message" class="form-control input-lg" type="text">
+            <span class="input-group-btn">
+              <button class="btn btn-lg btn-primary" type="submit">Send</button>
+            </span>
+            <select id="select">
+            </select>
+          </form>
+        </div>
+      </div>
+
+      <div class="col-md-2">
+        <div class="panel panel-info">
+          <div class="panel-heading">
+            Users
+          </div>
+          <div id="users" class="panel-body"></div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    jQuery(function ($) {
+      var socket = io.connect();
+      var $messageForm = $('#send-message');
+      var $messageBox = $('#message');
+      var $chat = $('#chat');
+      var $buttonSend = $('#send');
+
+      var $nickForm = $('#setNick');
+      var $nickBox = $('#nicknameFrom');
+      var $nickBox2 = $('#nicknameTo');
+      var $users = $('#users');
+      var $closeAlert = $('#closeAlert');
+      var $myNickName = "";
+      var $myUserId = "";
+
+      $nickForm.click(function (e) {
+        e.preventDefault();
+        socket.emit('new user', $nickBox.val(), $nickBox2.val(), function (data) {
+          $myNickName = $nickBox.val();
+          if (data.success) {
+            $('#nickWrap').hide();
+            $('#contentWrap').show();
+            $('#panelHead').append(" " + data.username + ' : ' + data.userId);
+            $myUserId = data.userId;
+            console.log("new user:",data.chats);
+            if(data.chats.length > 0){
+              for (let i = 0; i < data.chats.length; i++) {
+                const element = data.chats[i];
+                $('#chat').append('<b>' + element.fromUsername + ":</b> " + element.content + "<br/>");
+              }
+            }
+          } else {
+            $("#login-error").show();
+          }
+        });
+        // $nickBox.val('');
+      });
+
+      $closeAlert.click(function (e) {
+        $("#login-error").hide();
+      });
+
+      $messageForm.submit(function (e) {
+        e.preventDefault();
+        if ($messageBox.val() != '') socket.emit('send message', $messageBox.val(), $("#select option:selected").text());
+        $messageBox.val('');
+      });
+
+      socket.on('new message', function (data) {
+        console.log("new message:", data);
+        if (data.to == $myUserId || data.from == $myUserId) {
+          $chat.append('<b>' + data.fromUsername + ":</b> " + data.content + "<br/>");
+        } else if (data.to == 'all') {
+          $chat.append('<b>' + data.fromUsername + " - To all:</b> " + data.content + "<br/>");
+        }
+      });
+
+      socket.on('usernames', function (data) {
+        var html = '';
+        $('#select').find('option')
+          .remove()
+          .end();
+
+        for (var username in data) {
+          html += username + '<br/>';
+          $('#select').append($('<option>', {
+            value: username,
+            text: username
+          }));
+        }
+        // $('#select').append($('<option>', {
+        //   value: "all",
+        //   text: "all"
+        // }));
+        $users.html(html);
+      });
+
+    });
+
+  </script>
+</body>
+
+</html>

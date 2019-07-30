@@ -1,0 +1,9 @@
+{
+  "secret": "integrappforthewin",
+  "db_config" : {
+    "host": "ds227469.mlab.com",
+    "port": 27469,
+    "name": "integrapp_testing",
+    "user": "integrapp"
+  }
+}
